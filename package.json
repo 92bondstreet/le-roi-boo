@@ -6,7 +6,7 @@
   "scripts": {
     "db:migrate": "knex migrate:latest",
     "db:rollback": "knex migrate:rollback",
-    "test": "yarn db:migrate && jest --watch"
+    "test": "yarn db:migrate && jest --watch --coverage"
   },
   "dependencies": {
     "knex": "^0.14.6",
@@ -21,5 +21,19 @@
     "eslint": "^5.6.1",
     "eslint-plugin-jest": "^21.24.1",
     "jest": "^23.1.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "*.js",
+      "!sandbox.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   }
 }
