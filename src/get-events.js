@@ -7,8 +7,8 @@ import moment from 'moment';
  * Save the event
  * @param  {Object} current
  * @param  {Object} event
- * @param  {Date} day     [description]
- * @return {Object}         [description]
+ * @param  {Date} day
+ * @return {Object}
  */
 const save = (current, event, day) => {
   const {kind} = event;

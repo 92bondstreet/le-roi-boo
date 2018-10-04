@@ -4,9 +4,9 @@ import getNextDays from './get-next-days';
 
 /**
  * To compute a substraction, we search first overlapped appointment
- * @param  {Object} opening      [description]
- * @param  {[type]} appointments [description]
- * @return {[type]}              [description]
+ * @param  {Object} opening
+ * @param  {[type]} appointments
+ * @return {Array}
  */
 const findOverlappedAppointment = (opening, appointments) => {
   return appointments.filter(appointment => {
@@ -50,6 +50,8 @@ const findSlots = (event = {}) => {
     return flatten(times);
   });
 
+  // dedupe the time values is useful when a recurring event is defined
+  // in the same 7 days range
   return [...new Set(flatten(slots))];
 };
 
