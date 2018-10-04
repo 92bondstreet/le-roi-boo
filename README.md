@@ -22,9 +22,9 @@ To build the library to check the availabilities of an agenda, we need to confir
 
 So, could we make the hypothesis that
 
-- [ ] An opening slot has a duration of 30 minutes
+- [x] An opening slot has a duration of 30 minutes
 
-- [ ] The opening slot events are always a multiple of 30 min: I mean 30, 60, 90... minutes
+- [x] The opening slot events are always a multiple of 30 min: I mean 30, 60, 90... minutes
 
 ```js
 [
@@ -41,9 +41,9 @@ So, could we make the hypothesis that
 ]
 ```
 
-- [ ] An appointment slot has a duration of 30 minutes
+- [x] An appointment slot has a duration of 30 minutes
 
-- [ ] The appointment slot events are always a multiple of 30 min: I mean 30, 60, 90... minutes
+- [x] The appointment slot events are always a multiple of 30 min: I mean 30, 60, 90... minutes
 
 ```js
 [
@@ -60,7 +60,7 @@ So, could we make the hypothesis that
 ]
 ```
 
-- [ ] The opening slots start always at `x:00` or `x:30`
+- [x] The opening slots start always at `x:00` or `x:30`
 
 The hypothesis is related to the start time.
 
@@ -79,24 +79,7 @@ The hypothesis is related to the start time.
 ]
 ```
 
-**VS**
-
-```js
-[
-  {
-    kind: 'opening',
-    starts_at: new Date('2018-10-01 08:15'),
-    ends_at: new Date('2018-10-01 09:45'),
-  },
-  {
-    kind: 'opening',
-    starts_at: new Date('2018-10-01 10:10'),
-    ends_at: new Date('2018-10-01 10:40'),
-  }
-]
-```
-
-- [ ] The appointment slots start always at `x:00` or `x:30`
+- [x] The appointment slots start always at `x:00` or `x:30`
 
 The hypothesis is related to the start time.
 
@@ -115,31 +98,16 @@ The hypothesis is related to the start time.
 ]
 ```
 
-**VS**
+#### edge cases: deal not required  
 
-```js
-[
-  {
-    kind: 'appointment',
-    starts_at: new Date('2018-10-01 08:25'),
-    ends_at: new Date('2018-10-01 08:55'),
-  },
-  {
-    kind: 'appointment',
-    starts_at: new Date('2018-10-01 09:25'),
-    ends_at: new Date('2018-10-01 11:55'),
-  }
-]
-```
-
-- [ ] We can schedule an appointment on the Saturday, Sunday and France public bank holidays
+* We can schedule an appointment on the Saturday, Sunday and France public bank holidays
 
 The hypothesis is related to the **weekly_recurring** value.
 
 What's the deal about opening slots available on Sunday and public bank holidays.
 
 
-- [ ] The start and end date time of an opening slot is always on the same day
+* The start and end date time of an opening slot is always on the same day
 
 It means that an opening/appointment slot could not be between 2 days.
 The following event should not be valid:
@@ -154,7 +122,7 @@ The following event should not be valid:
 ]
 ```
 
-- [ ] The start and end date time of an appointment slot is always on the same day
+* The start and end date time of an appointment slot is always on the same day
 
 It means that opening/appointment could not be between 2 days.
 The following event should not be valid:
@@ -170,7 +138,6 @@ The following event should not be valid:
 ]
 ```
 
-- [ ] The timezone is Paris CET.
-
+* The timezone is Paris CET.
 
 Some these hypotheses - confirmed or not - may be considered as edge cases.
