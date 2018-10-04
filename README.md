@@ -1,6 +1,30 @@
 # Le roi boo
 
+[![Build Status](https://travis-ci.org/92bondstreet/le-roi-boo.svg?branch=master)](https://travis-ci.org/92bondstreet/le-roi-boo)
+[![Coverage Status](https://coveralls.io/repos/github/92bondstreet/le-roi-boo/badge.svg?branch=master)](https://coveralls.io/github/92bondstreet/le-roi-boo?branch=master)
+
+
 > Checks the availabilities of an agenda with Le Roi Boo alias BooKing.
+
+## Installation
+
+```sh
+❯ yarn add 92bondstreet/le-roi-boo
+```
+
+## Usage
+
+```js
+import getAvailabilities from 'le-roi-boo';
+
+async print () => {
+  const availabilities = await getAvailabilities(new Date('2018-10-01'))
+
+  console.log(availabilities);
+}
+
+print();
+```
 
 ## Objective
 
