@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "description": "Checks the availabilities of an agenda with Le Roi Boo alias BooKing.",
   "scripts": {
-    "coveralls": "yarn db:migrate && jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "yarn db:migrate && jest --coverage --runInBand && cat ./coverage/lcov.info | coveralls",
     "db:migrate": "knex migrate:latest",
     "db:rollback": "knex migrate:rollback",
-    "test": "yarn db:migrate && jest --watch --coverage",
-    "test-ci": "yarn db:migrate && jest --coverage"
+    "test": "yarn db:migrate && jest --watch --coverage --runInBand",
+    "test-ci": "yarn db:migrate && jest --coverage --runInBand"
   },
   "dependencies": {
     "coveralls": "^3.0.2",
