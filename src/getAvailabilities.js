@@ -1,6 +1,7 @@
 import {flatten, subtractRanges, toRange} from './utils';
 import getEvents from './get-events';
 import getNextDays from './get-next-days';
+import {STEP_MIN} from './constants';
 
 /**
  * To compute a substraction, we search first overlapped appointment
@@ -39,11 +40,15 @@ const findSlots = (event = {}) => {
   const {appointment = [], opening = []} = event;
 
   const slots = opening.map(open => {
+    // Step 0. We get all appointments that overlap the opening slot.
+    // Step 1. We make a substract to keep only free slot
+    // Step 2. We format the free slots to a time slot array with a step
+    // defined by STEP_MIN
     const overlapped = findOverlappedAppointment(open, appointment);
     const freeSlots = subtract(open, overlapped);
     const times = freeSlots.map(slot => {
       return Array
-        .from(slot.by('minutes', {'excludeEnd': true, 'step': 30}))
+        .from(slot.by('minutes', {'excludeEnd': true, 'step': STEP_MIN}))
         .map(m => m.format('H:mm'));
     });
 

@@ -20,10 +20,14 @@ export default async function getRecurring (date) {
   // parse all weekly recurring events that matches a date from the range
   const recurrent = events.map(event => {
     const interval = moment.utc(event.starts_at).recur().every(1).weeks();
-    const current = next.find(n => interval.matches(n));
-    const curr = moment(current);
-    const startsAt = moment(event.starts_at).set({'year': curr.year(), 'month': curr.month(), 'date': curr.date()});
-    const endsAt = moment(event.ends_at).set({'year': curr.year(), 'month': curr.month(), 'date': curr.date()});
+    const matched = next.find(n => interval.matches(n));
+
+    // now we found a matched date from the weekly recurring event
+    // we just replace the event with the current date (year, month, day)
+    const current = moment(matched);
+    const option = {'year': current.year(), 'month': current.month(), 'date': current.date()};
+    const startsAt = moment(event.starts_at).set(option);
+    const endsAt = moment(event.ends_at).set(option);
 
     return {
       'kind': 'opening',
