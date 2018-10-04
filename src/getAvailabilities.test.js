@@ -124,6 +124,61 @@ describe('getAvailabilities', () => {
     })
   })
 
+  describe('appointments that completely overlap an open slot', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-10-01 09:30'),
+          ends_at: new Date('2018-10-01 10:30'),
+        },
+        {
+          kind: 'appointment',
+          starts_at: new Date('2018-10-01 08:00'),
+          ends_at: new Date('2018-10-01 12:30'),
+        }
+      ])
+    })
+
+    it('should fetch availabilities correctly', async () => {
+      const availabilities = await getAvailabilities(new Date('2018-10-01'))
+
+      expect(availabilities.length).toBe(7)
+
+      expect(availabilities[0].slots).toEqual([]);
+    })
+  })
+
+  describe('appointments that partially overlap an open slot', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-10-01 09:30'),
+          ends_at: new Date('2018-10-01 11:00'),
+        },
+        {
+          kind: 'appointment',
+          starts_at: new Date('2018-10-01 08:00'),
+          ends_at: new Date('2018-10-01 10:00'),
+        },
+        {
+          kind: 'appointment',
+          starts_at: new Date('2018-10-01 10:30'),
+          ends_at: new Date('2018-10-01 12:00'),
+        }
+      ])
+    })
+
+    it('should fetch availabilities correctly', async () => {
+      const availabilities = await getAvailabilities(new Date('2018-10-01'))
+
+      expect(availabilities.length).toBe(7)
+
+      expect(availabilities[0].slots).toEqual(['10:00']);
+    })
+  })
+
   /*describe('recurring opening really really in the past', () => {
     beforeEach(async () => {
       await knex('events').insert([

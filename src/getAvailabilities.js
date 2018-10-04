@@ -1,13 +1,6 @@
-import {extendMoment} from 'moment-range';
+import {flatten, subtractRanges, toRange} from './utils';
 import getEvents from './get-events';
 import getNextDays from './get-next-days';
-import Moment from 'moment';
-
-const moment = extendMoment(Moment);
-
-const flatten = source => {
-  return [].concat(...source);
-};
 
 /**
  * To compute a substraction, we search first overlapped appointment
@@ -17,34 +10,11 @@ const flatten = source => {
  */
 const findOverlappedAppointment = (opening, appointments) => {
   return appointments.filter(appointment => {
-    const range1 = moment.range(opening.starts_at, opening.ends_at);
-    const range2 = moment.range(appointment.starts_at, appointment.ends_at);
+    const range1 = toRange(opening);
+    const range2 = toRange(appointment);
 
     return range1.overlaps(range2);
   });
-};
-
-/**
- * [subtractRanges description]
- * @example https://github.com/rotaready/moment-range/issues/159
- * @param  {[type]} source [description]
- * @param  {[type]} others [description]
- * @return {[type]}        [description]
- */
-const subtractRanges = (source, others) => {
-  if (! Array.isArray(source)) {
-    source = [source];
-  }
-
-  return flatten(source.map(s => {
-    let remaining = [s];
-
-    flatten(others).forEach(other => {
-      remaining = flatten(remaining.map(r => r.subtract(other)));
-    });
-
-    return remaining;
-  }));
 };
 
 /**
@@ -54,8 +24,10 @@ const subtractRanges = (source, others) => {
  * @return {Date}
  */
 const subtract = (opening, overlapped) => {
-  return subtractRanges(moment.range(opening.starts_at, opening.ends_at),
-    overlapped.map(busy => moment.range(busy.starts_at, busy.ends_at)));
+  const open = toRange(opening);
+  const appointments = overlapped.map(toRange);
+
+  return subtractRanges(open, appointments);
 };
 
 /**
