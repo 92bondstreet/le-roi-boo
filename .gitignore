@@ -186,3 +186,6 @@ coverage
 .nyc_output
 *.html
 *.cookies
+
+### sqlite ###
+db.sqlite
