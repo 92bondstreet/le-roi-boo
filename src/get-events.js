@@ -1,4 +1,5 @@
 import getNextDays from './get-next-days';
+import getRecurring from './get-recurring';
 import knex from 'knexClient';
 import moment from 'moment';
 
@@ -35,9 +36,15 @@ export default async function getEvents (date) {
   const start = next[0].valueOf();
   const end = next[next.length - 1].valueOf();
 
-  const events = await knex('events')
+  // Step 0. Get events from db
+  // Step 1. Get recurring events from db
+  // Step 2. Merge events
+
+  const results = await knex('events')
     .where('starts_at', '>=', start)
     .andWhere('ends_at', '<=', end);
+  const recurrent = await getRecurring(date);
+  const events = [...results, ...recurrent];
 
   return events.reduce((current, event) => {
     const {starts_at} = event; //eslint-disable-line

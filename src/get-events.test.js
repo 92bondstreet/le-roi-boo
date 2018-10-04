@@ -32,6 +32,34 @@ describe('getEvents', () => {
     })
   })
 
+  describe('unique recurring events', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-09-17 09:30'),
+          ends_at: new Date('2018-09-17 12:30'),
+          weekly_recurring: true
+        },
+        {
+          kind: 'appointment',
+          starts_at: new Date('2018-10-01 10:30'),
+          ends_at: new Date('2018-10-01 11:30')
+        },
+      ])
+    })
+
+    it('should query correctly the next days events', async () => {
+      const date = new Date('2018-10-01');
+      const events = await getEvents(date);
+      const current = events[date];
+
+      expect(Object.keys(events).length).toBe(1)
+      expect(current.opening.length).toEqual(1)
+      expect(current.appointment.length).toEqual(1);
+    })
+  })
+
   describe('multiple events on same day', () => {
     beforeEach(async () => {
       await knex('events').insert([
@@ -73,6 +101,52 @@ describe('getEvents', () => {
       expect(current.appointment.length).toEqual(3);
     })
   })
+
+  describe('multiple recurring events', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-09-17 09:30'),
+          ends_at: new Date('2018-09-17 12:30'),
+          weekly_recurring: true
+        },
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-09-19 14:00'),
+          ends_at: new Date('2018-09-19 16:00'),
+          weekly_recurring: true
+        },
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-10-05 09:30'),
+          ends_at: new Date('2018-10-05 12:30'),
+          weekly_recurring: true
+        },
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-12-01 09:30'),
+          ends_at: new Date('2018-12-01 12:30'),
+          weekly_recurring: true
+        },
+        {
+          kind: 'appointment',
+          starts_at: new Date('2018-10-01 10:30'),
+          ends_at: new Date('2018-10-01 11:30')
+        },
+      ])
+    })
+
+    it('should query correctly the next days events', async () => {
+      const date = new Date('2018-10-01');
+      const events = await getEvents(date);
+      const current = events[date];
+
+      expect(Object.keys(events).length).toBe(3)
+      expect(current.opening.length).toEqual(1)
+      expect(current.appointment.length).toEqual(1);
+    })
+  });
 
   describe('agenda between 2 months', () => {
     beforeEach(async () => {

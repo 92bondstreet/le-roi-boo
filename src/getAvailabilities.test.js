@@ -5,7 +5,7 @@ import getAvailabilities from './getAvailabilities'
 describe('getAvailabilities', () => {
   beforeEach(() => knex('events').truncate())
 
-  /*describe('simple case', () => {
+  describe('simple case', () => {
     beforeEach(async () => {
       await knex('events').insert([
         {
@@ -47,7 +47,33 @@ describe('getAvailabilities', () => {
         String(new Date('2014-08-16')),
       )
     })
-  })*/
+  })
+
+  describe('unique opening event', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-10-01 09:30'),
+          ends_at: new Date('2018-10-01 10:30'),
+        }
+      ])
+    })
+
+    it('should fetch availabilities correctly', async () => {
+      const availabilities = await getAvailabilities(new Date('2018-10-01'))
+      expect(availabilities.length).toBe(7)
+
+      expect(String(availabilities[0].date)).toBe(
+        String(new Date('2018-10-01')),
+      )
+
+      expect(availabilities[0].slots).toEqual([
+        '9:30',
+        '10:00'
+      ])
+    })
+  })
 
   describe('multiple openings on same day', () => {
     beforeEach(async () => {
@@ -179,13 +205,13 @@ describe('getAvailabilities', () => {
     })
   })
 
-  /*describe('recurring opening really really in the past', () => {
+  describe('recurring opening really really in the past', () => {
     beforeEach(async () => {
       await knex('events').insert([
         {
           kind: 'opening',
-          starts_at: new Date('2018-08-19 09:30'),
-          ends_at: new Date('2018-08-19 10:30'),
+          starts_at: new Date('2018-08-13 09:30'),
+          ends_at: new Date('2018-08-13 10:30'),
           weekly_recurring: true
         }
       ])
@@ -220,8 +246,8 @@ describe('getAvailabilities', () => {
         },
         {
           kind: 'appointment',
-          starts_at: new Date('2018-09-19 15:00'),
-          ends_at: new Date('2018-09-19 18:00'),
+          starts_at: new Date('2018-10-03 15:00'),
+          ends_at: new Date('2018-10-03 18:00'),
         },
       ])
     })
@@ -249,7 +275,7 @@ describe('getAvailabilities', () => {
         '14:30'
       ]);
     })
-  })*/
+  })
 
   describe('multiple openings after the given date', () => {
     beforeEach(async () => {
@@ -334,7 +360,7 @@ describe('getAvailabilities', () => {
     })
   })
 
-  /*describe('recurring opening after the given date', () => {
+  describe('recurring opening after the given date', () => {
     beforeEach(async () => {
       await knex('events').insert([
         {
@@ -408,7 +434,7 @@ describe('getAvailabilities', () => {
         '14:30'
       ]);
     })
-  })*/
+  })
 
   describe('agenda between 2 months', () => {
     beforeEach(async () => {

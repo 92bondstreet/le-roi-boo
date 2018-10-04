@@ -20,12 +20,12 @@ const findOverlappedAppointment = (opening, appointments) => {
 /**
  * Substract open slot with busy slot
  * @param  {Date} opening
- * @param  {Array} overlapped
+ * @param  {Array} busy
  * @return {Date}
  */
-const subtract = (opening, overlapped) => {
+const subtract = (opening, busy) => {
   const open = toRange(opening);
-  const appointments = overlapped.map(toRange);
+  const appointments = busy.map(toRange);
 
   return subtractRanges(open, appointments);
 };
@@ -50,7 +50,7 @@ const findSlots = (event = {}) => {
     return flatten(times);
   });
 
-  return flatten(slots);
+  return [...new Set(flatten(slots))];
 };
 
 /**
